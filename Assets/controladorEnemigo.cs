@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class controladorEnemigo : MonoBehaviour {
 
@@ -31,23 +32,27 @@ public class controladorEnemigo : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if (Input.GetKeyDown (boton_disparar)) {
-			disparar ();
-		}
+		disparar ();
 
 		LookAt2D(new Vector2 (GameObject.Find("BattleShip").transform.position.x, GameObject.Find("BattleShip").transform.position.y));
 	}
 
 	void disparar(){
-		//Buscamos el objeto en la escena:
-		GameObject spawn = GameObject.Find("BulletSpawn2");
+		System.Random rand = new System.Random ();
 
-		//comprobamos que no nos hemos salido:
-		Vector2 posicion = new Vector2 (spawn.transform.position.x, spawn.transform.position.y);
+		// Este if hace que el disparo del enemigo sea aleatorio. Se puede poner algo que pase con menos probabilidad
+		// para que dispare menos.
+		if (rand.Next (0, 1000) % 41 == 0) {
 
-		GameObject copia = Instantiate (bala, posicion, Quaternion.identity);
-		copia.GetComponent<Rigidbody2D> ().velocity = transform.right * bala.GetComponent<normalBulletController> ().velocidadBala;
+			//Buscamos el objeto en la escena:
+			GameObject spawn = GameObject.Find ("BulletSpawn2");
 
+			//comprobamos que no nos hemos salido:
+			Vector2 posicion = new Vector2 (spawn.transform.position.x, spawn.transform.position.y);
+
+			GameObject copia = Instantiate (bala, posicion, Quaternion.identity);
+			copia.GetComponent<Rigidbody2D> ().velocity = transform.right * bala.GetComponent<normalBulletController> ().velocidadBala;
+		}
 	}
 
 
