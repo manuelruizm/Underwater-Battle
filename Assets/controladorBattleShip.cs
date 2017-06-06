@@ -35,23 +35,18 @@ public class controladorBattleShip : MonoBehaviour {
 		translation *= Time.deltaTime;
 		rotation *= Time.deltaTime;
 		transform.Translate(translation, 0, 0);
-		transform.Rotate(0, rotation, 0);
+		transform.Rotate(0, 0, -rotation);
 
 	}
 
 	void disparar(){
-		//Buscamos el objeto en la escena:
-		GameObject barco = gameObject.transform.Find("torretaDelantera").gameObject;
-
 		//comprobamos que no nos hemos salido:
-		if (barco != null) {
-			Vector3 posicion = new Vector3 (barco.transform.position.x, barco.transform.position.y, barco.transform.position.z);
+		GameObject spawn = GameObject.Find("BulletSpawn");
+		Vector2 posicion = new Vector2 (spawn.transform.position.x, spawn.transform.position.y);
 
-			GameObject copia = Instantiate (bala, posicion, Quaternion.identity);
-			copia.GetComponent<Rigidbody2D> ().velocity = -barco.transform.right * bala.GetComponent<normalBulletController> ().velocidadBala;
+		GameObject copia = Instantiate (bala, posicion, Quaternion.identity);
+		copia.GetComponent<Rigidbody2D> ().velocity = transform.right * bala.GetComponent<normalBulletController> ().velocidadBala;
 
-
-		}
 	}
 
 

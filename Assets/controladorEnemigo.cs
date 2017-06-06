@@ -13,12 +13,19 @@ public class controladorEnemigo : MonoBehaviour {
 
 
 	void Start () {
-		avanzar = KeyCode.W;
 		boton_disparar = KeyCode.Space;
 		velocidad_lineal = 2;
 		velocidad_angular = 100f;
 
 
+	}
+
+	void LookAt2D(Vector2 target)
+	{
+		Vector2 current = new Vector2(transform.position.x, transform.position.y );
+		var direction = target - current;
+		var angle = Mathf.Atan2(direction.y, direction.x)*Mathf.Rad2Deg;
+		transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 	}
 
 	// Update is called once per frame
@@ -28,26 +35,19 @@ public class controladorEnemigo : MonoBehaviour {
 			disparar ();
 		}
 
-		Vector3 v = new Vector3 (-90, 0, 0);
-		transform.up = GameObject.Find("BattleShip").transform.position - transform.position;
-		//transform.Rotate (v);
-
-
+		LookAt2D(new Vector2 (GameObject.Find("BattleShip").transform.position.x, GameObject.Find("BattleShip").transform.position.y));
 	}
 
 	void disparar(){
 		//Buscamos el objeto en la escena:
-		GameObject barco = gameObject.transform.Find("torretaDelantera").gameObject;
+		GameObject spawn = GameObject.Find("BulletSpawn2");
 
 		//comprobamos que no nos hemos salido:
-		if (barco != null) {
-			Vector3 posicion = new Vector3 (barco.transform.position.x, barco.transform.position.y, barco.transform.position.z);
+		Vector2 posicion = new Vector2 (spawn.transform.position.x, spawn.transform.position.y);
 
-			GameObject copia = Instantiate (bala, posicion, Quaternion.identity);
-			copia.GetComponent<Rigidbody2D> ().velocity = -barco.transform.right * bala.GetComponent<normalBulletController> ().velocidadBala;
+		GameObject copia = Instantiate (bala, posicion, Quaternion.identity);
+		copia.GetComponent<Rigidbody2D> ().velocity = transform.right * bala.GetComponent<normalBulletController> ().velocidadBala;
 
-
-		}
 	}
 
 
