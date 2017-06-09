@@ -13,12 +13,17 @@ public class controladorEnemigo : MonoBehaviour {
 	private bool paused;
 	public int vidas;
 
+	private GameObject menuNivelSuperado;
+
 
 	void Start () {
 		boton_disparar = KeyCode.Space;
 		velocidad_lineal = 2;
 		velocidad_angular = 100f;
 		paused = false;
+
+		GameObject canvas = GameObject.Find ("Canvas").gameObject;
+		menuNivelSuperado = canvas.transform.Find("nivelSuperado").gameObject;
 
 
 
@@ -68,8 +73,19 @@ public class controladorEnemigo : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D colision){
 		if (colision.gameObject.name == "NormalBullet(Clone)") {
 			vidas--;
-			if(vidas<=0)
+			if (vidas <= 0) {
 				Destroy (gameObject);
+
+				// Cuando se destruye el objeto salta el nivel superado
+				superarNivel ();
+
+				// Entrar en pausa para que no te puedas eliminar con las balas restantes
+				Time.timeScale = 0;
+				UnityEngine.Object[] objects = FindObjectsOfType (typeof(GameObject));
+				foreach (GameObject go in objects) {
+					go.SendMessage ("OnPauseGame", SendMessageOptions.DontRequireReceiver);
+				}
+			}
 			Destroy (colision.gameObject);
 		}
 	}
@@ -81,6 +97,11 @@ public class controladorEnemigo : MonoBehaviour {
 	void OnResumeGame ()
 	{
 		paused = false;
+	}
+
+	void superarNivel() {
+
+		menuNivelSuperado.SetActive (true);
 	}
 
 
