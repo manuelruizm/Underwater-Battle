@@ -25,7 +25,7 @@ public class Controlador : MonoBehaviour {
 		MenuCreditos.active = false;
 
 		player = GetComponent<AudioSource> ();
-		
+
 	}
 
 	public void CambiarEscena(string nombre){
@@ -75,4 +75,5 @@ public class Controlador : MonoBehaviour {
 			player.Play ();
 		}
 	}
+		
 }

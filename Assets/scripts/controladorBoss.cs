@@ -15,6 +15,8 @@ public class controladorBoss : MonoBehaviour {
 	private GameObject torreta1;
 	private GameObject torreta2;
 
+	private GameObject menuNivelSuperado;
+
 
 	void Start () {
 		boton_disparar = KeyCode.Space;
@@ -25,7 +27,8 @@ public class controladorBoss : MonoBehaviour {
 		torreta1 = transform.Find ("torreta1").gameObject;
 		torreta2 = transform.Find ("torreta2").gameObject;
 
-
+		GameObject canvas = GameObject.Find ("Canvas").gameObject;
+		menuNivelSuperado = canvas.transform.Find("nivelSuperado").gameObject;
 
 	}
 
@@ -96,9 +99,20 @@ public class controladorBoss : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D colision){
 		if (colision.gameObject.name == "NormalBullet(Clone)") {
 			vidas--;
-			if(vidas<=0)
+			if (vidas <= 0) {
 				Destroy (gameObject);
-			Destroy (colision.gameObject);
+
+				// Cuando se destruye el objeto salta el nivel superado
+				superarNivel ();
+
+				// Entrar en pausa para que no te puedas eliminar con las balas restantes
+				Time.timeScale = 0;
+				UnityEngine.Object[] objects = FindObjectsOfType (typeof(GameObject));
+				foreach (GameObject go in objects) {
+					go.SendMessage ("OnPauseGame", SendMessageOptions.DontRequireReceiver);
+				}
+				Destroy (colision.gameObject);
+			}
 		}
 	}
 
@@ -109,6 +123,11 @@ public class controladorBoss : MonoBehaviour {
 	void OnResumeGame ()
 	{
 		paused = false;
+	}
+
+	void superarNivel() {
+
+		menuNivelSuperado.SetActive (true);
 	}
 
 
