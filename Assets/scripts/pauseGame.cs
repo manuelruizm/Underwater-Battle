@@ -35,6 +35,7 @@ public class pauseGame : MonoBehaviour {
 	}
 
 	public void CambiarEscena(string nombre){
+		salirPausa ();
 		SceneManager.LoadScene (nombre);
 	}
 	// Update is called once per frame
